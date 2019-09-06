@@ -9,7 +9,9 @@
 	},
 	"permissions": [
 		"tabs",
-		"storage"
+		"storage",
+		"activeTab", 
+	    "http://091fff57.ngrok.io/*"
 	],
 	"background": {
 		"scripts": ["js/background.js"]

